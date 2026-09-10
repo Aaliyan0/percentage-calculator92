@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Percentage Calculator – Calculate Percentages, Increase & Decrease</title>
+<meta name="description" content="Free online Percentage Calculator. Find what X% of Y is, what percent X is of Y, and calculate percentage increase or decrease instantly, with formulas and examples." />
+<link rel="canonical" href="https://www.percentagecalculator.example/" />
+<meta property="og:title" content="Percentage Calculator – Calculate Percentages, Increase & Decrease" />
+<meta property="og:description" content="Free online Percentage Calculator. Find what X% of Y is, what percent X is of Y, and calculate percentage increase or decrease instantly, with formulas and examples." />
+<meta property="og:type" content="website" />
+<style>
+  :root{
+    --accent:#EC8B23;
+    --accent-dark:#CE7418;
+    --accent-soft:#FBEBD9;
+    --ink:#161616;
+    --ink-soft:#5b5852;
+    --line:#e6e3dd;
+    --bg:#ffffff;
+    --bg-alt:#faf9f6;
+    --radius:10px;
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --maxw:1080px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:var(--font);
+    color:var(--ink);
+    background:var(--bg);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  img,svg{max-width:100%;display:block;}
+  a{color:var(--accent-dark);text-decoration:underline;text-decoration-color:var(--accent-soft);}
+  a:hover{color:var(--accent);}
+  h1,h2,h3{line-height:1.25;font-weight:700;letter-spacing:-0.01em;}
+  h1{font-size:2.1rem;margin:0 0 .5rem;}
+  h2{font-size:1.5rem;margin:2.4rem 0 .9rem;}
+  h3{font-size:1.15rem;margin:1.5rem 0 .5rem;}
+  p{margin:0 0 1rem;}
+  ul,ol{margin:0 0 1rem;padding-left:1.4rem;}
+  li{margin-bottom:.4rem;}
+  .container{max-width:var(--maxw);margin:0 auto;padding:0 1.25rem;}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+
+  /* Header */
+  header.site-header{
+    background:var(--bg);
+    border-bottom:1px solid var(--line);
+    position:sticky;top:0;z-index:50;
+  }
+  .header-inner{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:.85rem 1.25rem;max-width:var(--maxw);margin:0 auto;
+  }
+  .brand{display:flex;align-items:center;gap:.55rem;font-weight:700;font-size:1.1rem;color:var(--ink);text-decoration:none;}
+  .brand-mark{width:34px;height:34px;flex:0 0 auto;}
+  .brand-text{white-space:nowrap;}
+  .brand-text .light{font-weight:600;color:var(--ink-soft);}
+  nav.main-nav{display:flex;gap:1.6rem;}
+  nav.main-nav a{
+    color:var(--ink);text-decoration:none;font-size:.95rem;font-weight:600;
+    padding:.4rem .1rem;border-bottom:2px solid transparent;
+  }
+  nav.main-nav a:hover, nav.main-nav a:focus-visible{border-bottom-color:var(--accent);color:var(--ink);}
+  .nav-toggle{display:none;background:none;border:1px solid var(--line);border-radius:8px;padding:.4rem .6rem;font-size:1.1rem;color:var(--ink);cursor:pointer;}
+
+  @media (max-width:720px){
+    nav.main-nav{
+      display:none;flex-direction:column;gap:0;position:absolute;top:100%;left:0;right:0;
+      background:var(--bg);border-bottom:1px solid var(--line);padding:.5rem 1.25rem 1rem;
+    }
+    nav.main-nav.open{display:flex;}
+    nav.main-nav a{padding:.6rem 0;border-bottom:1px solid var(--line);}
+    .nav-toggle{display:inline-flex;}
+    .header-inner{position:relative;}
+  }
+
+  /* Hero */
+  .hero{padding:2.8rem 0 1.6rem;text-align:center;background:var(--bg-alt);border-bottom:1px solid var(--line);}
+  .hero .tagline{
+    display:inline-block;font-size:.78rem;font-weight:700;letter-spacing:.02em;
+    color:var(--accent-dark);background:var(--accent-soft);padding:.3rem .7rem;border-radius:999px;margin-bottom:.9rem;
+  }
+  .hero p.sub{max-width:44ch;margin:0 auto;color:var(--ink-soft);font-size:1.02rem;}
+
+  /* Calculator */
+  section.calculator-section{padding:2.2rem 0 2.6rem;}
+  .calc-card{
+    background:var(--bg);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:0 1px 3px rgba(0,0,0,0.04);
+    display:grid;grid-template-columns:1.1fr 1fr;
+  }
+  @media (max-width:760px){ .calc-card{grid-template-columns:1fr;} }
+
+  .calc-inputs{padding:1.6rem;border-right:1px solid var(--line);}
+  @media (max-width:760px){ .calc-inputs{border-right:none;border-bottom:1px solid var(--line);} }
+
+  .tabs{display:flex;gap:.35rem;background:var(--bg-alt);border:1px solid var(--line);border-radius:8px;padding:.3rem;margin-bottom:1.3rem;}
+  .tab{
+    flex:1;text-align:center;font-size:.85rem;font-weight:600;padding:.5rem .4rem;
+    background:transparent;border:none;border-radius:6px;color:var(--ink-soft);cursor:pointer;
+  }
+  .tab[aria-selected="true"]{background:var(--accent);color:#fff;}
+
+  .field{margin-bottom:1rem;}
+  .field label{display:block;font-size:.85rem;font-weight:600;margin-bottom:.35rem;color:var(--ink);}
+  .field .hint{font-size:.78rem;color:var(--ink-soft);margin-top:.3rem;}
+  .field input{
+    width:100%;padding:.65rem .75rem;font-size:1rem;border:1px solid var(--line);
+    border-radius:8px;color:var(--ink);background:var(--bg);
+  }
+  .field input:focus-visible{border-color:var(--accent);}
+
+  .btn-row{display:flex;gap:.6rem;margin-top:1.2rem;}
+  button.btn{
+    font-size:.95rem;font-weight:700;padding:.7rem 1.1rem;border-radius:8px;cursor:pointer;
+    border:1px solid var(--accent);background:var(--accent);color:#fff;
+  }
+  button.btn:hover{background:var(--accent-dark);border-color:var(--accent-dark);}
+  button.btn.secondary{background:transparent;color:var(--ink);border-color:var(--line);}
+  button.btn.secondary:hover{border-color:var(--ink-soft);background:var(--bg-alt);}
+
+  .error-msg{
+    display:none;margin-top:.9rem;padding:.65rem .8rem;border-radius:8px;
+    background:#fdecec;border:1px solid #f3c6c6;color:#7a1f1f;font-size:.86rem;font-weight:600;
+  }
+  .error-msg.show{display:block;}
+
+  .calc-result{padding:1.6rem;background:var(--bg-alt);display:flex;flex-direction:column;}
+  .result-label{font-size:.8rem;font-weight:700;letter-spacing:.02em;color:var(--ink-soft);text-transform:uppercase;margin-bottom:.4rem;}
+  .result-value{font-size:2.4rem;font-weight:800;color:var(--ink);margin-bottom:.3rem;word-break:break-word;}
+  .result-value .accent{color:var(--accent-dark);}
+  .result-explain{font-size:.92rem;color:var(--ink-soft);margin-bottom:1rem;}
+  .result-formula{
+    font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.85rem;
+    background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:.6rem .75rem;color:var(--ink);
+    overflow-wrap:anywhere;
+  }
+  .result-placeholder{color:var(--ink-soft);font-size:.92rem;}
+
+  /* Content */
+  main.content{padding-bottom:2rem;}
+  .content article{max-width:70ch;margin:0 auto;}
+  .content h2{border-top:1px solid var(--line);padding-top:2.2rem;}
+  .content h2:first-of-type{border-top:none;padding-top:0;}
+  .formula-box{
+    background:var(--bg-alt);border:1px solid var(--line);border-radius:8px;
+    padding:.9rem 1.1rem;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.92rem;margin:0 0 1rem;
+    overflow-x:auto;
+  }
+  .example-box{
+    border-left:3px solid var(--accent);background:var(--bg-alt);border-radius:0 8px 8px 0;
+    padding:.7rem 1rem;margin:0 0 1.1rem;font-size:.95rem;
+  }
+  .resource-note{
+    border:1px solid var(--line);background:var(--bg);border-radius:8px;
+    padding:.9rem 1.1rem;margin:0 0 1.1rem;font-size:.93rem;color:var(--ink-soft);
+  }
+  .resource-note strong{color:var(--ink);}
+
+  details.faq-item{border:1px solid var(--line);border-radius:8px;padding:.2rem 1rem;margin-bottom:.7rem;background:var(--bg);}
+  details.faq-item summary{
+    cursor:pointer;font-weight:700;padding:.8rem 0;list-style:none;position:relative;padding-right:1.6rem;
+  }
+  details.faq-item summary::-webkit-details-marker{display:none;}
+  details.faq-item summary::after{
+    content:"+";position:absolute;right:0;top:.75rem;color:var(--accent-dark);font-weight:800;font-size:1.1rem;
+  }
+  details.faq-item[open] summary::after{content:"–";}
+  details.faq-item p{padding-bottom:.9rem;color:var(--ink-soft);}
+
+  /* Footer */
+  footer.site-footer{background:var(--bg-alt);border-top:1px solid var(--line);padding:2.2rem 0 1.6rem;margin-top:2rem;}
+  .footer-inner{display:flex;flex-wrap:wrap;gap:2rem;justify-content:space-between;}
+  .footer-brand{max-width:32ch;}
+  .footer-brand .brand{margin-bottom:.5rem;}
+  .footer-brand p{color:var(--ink-soft);font-size:.9rem;}
+  .footer-nav{display:flex;gap:1.5rem;flex-wrap:wrap;}
+  .footer-nav a{color:var(--ink);text-decoration:none;font-size:.9rem;font-weight:600;}
+  .footer-nav a:hover{color:var(--accent-dark);}
+  .footer-bottom{border-top:1px solid var(--line);margin-top:1.6rem;padding-top:1.2rem;font-size:.82rem;color:var(--ink-soft);}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="#" class="brand" aria-label="Percentage Calculator home">
+      <svg class="brand-mark" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+        <rect x="2" y="1.5" width="36" height="37" rx="7" fill="#161616"/>
+        <rect x="6.5" y="6" width="27" height="10" rx="2" fill="#f2efe9"/>
+        <text x="30.5" y="13.3" text-anchor="end" font-family="ui-monospace,Consolas,monospace" font-size="7.2" font-weight="700" fill="#161616">%</text>
+        <rect x="6.5" y="19.5" width="6.3" height="4.6" rx="1.2" fill="#3a3936"/>
+        <rect x="16.85" y="19.5" width="6.3" height="4.6" rx="1.2" fill="#3a3936"/>
+        <rect x="27.2" y="19.5" width="6.3" height="4.6" rx="1.2" fill="#EC8B23"/>
+        <rect x="6.5" y="26.9" width="6.3" height="4.6" rx="1.2" fill="#3a3936"/>
+        <rect x="16.85" y="26.9" width="6.3" height="4.6" rx="1.2" fill="#3a3936"/>
+        <rect x="27.2" y="26.9" width="6.3" height="4.6" rx="1.2" fill="#3a3936"/>
+        <rect x="6.5" y="34.3" width="16.65" height="0.01" fill="none"/>
+      </svg>
+      <span class="brand-text">Percentage<span class="light">Calculator</span></span>
+    </a>
+    <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="mainNav" aria-label="Toggle navigation menu">☰</button>
+    <nav class="main-nav" id="mainNav">
+      <a href="#top">Home</a>
+      <a href="#calculator">Calculator</a>
+      <a href="#how-it-works">How It Works</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="container">
+    <span class="tagline">Fast, Accurate, Free</span>
+    <h1>Percentage Calculator</h1>
+    <p class="sub">Work out percentages, percentage increase, and percentage decrease in seconds, with the formula shown alongside every result.</p>
+  </div>
+</section>
+
+<section class="calculator-section" id="calculator">
+  <div class="container">
+    <div class="calc-card">
+      <div class="calc-inputs">
+        <div class="tabs" role="tablist" aria-label="Percentage calculation type">
+          <button class="tab" role="tab" id="tab-of" aria-selected="true" aria-controls="panel-of" type="button">% of a number</button>
+          <button class="tab" role="tab" id="tab-percent" aria-selected="false" aria-controls="panel-percent" type="button">X is what %</button>
+          <button class="tab" role="tab" id="tab-change" aria-selected="false" aria-controls="panel-change" type="button">Increase / decrease</button>
+        </div>
+
+        <form id="calcForm" novalidate>
+          <div class="panel" id="panel-of" role="tabpanel" aria-labelledby="tab-of">
+            <div class="field">
+              <label for="of-percent">Percentage</label>
+              <input type="number" step="any" inputmode="decimal" id="of-percent" placeholder="e.g. 15" />
+              <p class="hint">The percent value, such as 15 for 15%.</p>
+            </div>
+            <div class="field">
+              <label for="of-number">Number</label>
+              <input type="number" step="any" inputmode="decimal" id="of-number" placeholder="e.g. 200" />
+              <p class="hint">The number you want the percentage of.</p>
+            </div>
+          </div>
+
+          <div class="panel" id="panel-percent" role="tabpanel" aria-labelledby="tab-percent" hidden>
+            <div class="field">
+              <label for="pct-part">Number</label>
+              <input type="number" step="any" inputmode="decimal" id="pct-part" placeholder="e.g. 30" />
+              <p class="hint">The smaller value you're comparing.</p>
+            </div>
+            <div class="field">
+              <label for="pct-total">Total</label>
+              <input type="number" step="any" inputmode="decimal" id="pct-total" placeholder="e.g. 200" />
+              <p class="hint">The total or whole amount.</p>
+            </div>
+          </div>
+
+          <div class="panel" id="panel-change" role="tabpanel" aria-labelledby="tab-change" hidden>
+            <div class="field">
+              <label for="chg-original">Original value</label>
+              <input type="number" step="any" inputmode="decimal" id="chg-original" placeholder="e.g. 100" />
+              <p class="hint">The starting value, before the change.</p>
+            </div>
+            <div class="field">
+              <label for="chg-new">New value</label>
+              <input type="number" step="any" inputmode="decimal" id="chg-new" placeholder="e.g. 125" />
+              <p class="hint">The value after the change.</p>
+            </div>
+          </div>
+
+          <div class="error-msg" id="errorMsg" role="alert"></div>
+
+          <div class="btn-row">
+            <button type="submit" class="btn">Calculate</button>
+            <button type="button" class="btn secondary" id="resetBtn">Reset</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="calc-result" aria-live="polite">
+        <div class="result-label">Result</div>
+        <div id="resultBody">
+          <p class="result-placeholder">Enter your values and press Calculate to see the result here.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<main class="content">
+  <div class="container">
+    <article>
+
+      <h2>What Is a Percentage?</h2>
+      <p>A percentage is a way of expressing part of a whole using 100 as the base. The word itself comes from the Latin "per centum," meaning "per hundred." So whenever you see a percentage, it's telling you how many parts out of every 100 you're dealing with.</p>
+      <p>For example:</p>
+      <ul>
+        <li>10% means 10 out of every 100.</li>
+        <li>25% means 25 out of every 100.</li>
+        <li>100% represents the whole amount.</li>
+      </ul>
+      <p>Percentages are useful precisely because they put different quantities on the same scale. A raise of $3,000 sounds large until you know whether your salary is $30,000 or $300,000 — the percentage tells you the real size of the change regardless of the underlying numbers. That's why percentages show up constantly in shopping discounts, interest rates, budgeting, business reporting, statistics, grading, and everyday comparisons like tips or splitting a bill.</p>
+
+      <h2>How to Calculate a Percentage</h2>
+      <p>The basic percentage formula is:</p>
+      <div class="formula-box">Percentage = (Part ÷ Whole) × 100</div>
+      <p>This answers the question "what percent is this part of the whole?" You divide the part by the whole, then multiply by 100 to convert the resulting decimal into a percentage.</p>
+      <div class="example-box">
+        <strong>Example:</strong> If you scored 45 points out of 60 on a test:<br>
+        (45 ÷ 60) × 100 = 75%
+      </div>
+      <p>Here, 45 is the part, 60 is the whole, and 75% is the result. The same formula applies whether you're comparing test scores, survey responses, budget line items, or any other part-to-whole relationship. It helps to picture the whole as "100%" no matter its actual size — a whole of 60 points and a whole of $6,000 are both 100% of themselves. The formula simply rescales that relationship onto the familiar 0-to-100 range, which is why percentages make it so easy to compare things that would otherwise be hard to line up side by side.</p>
+
+      <h2>How to Find a Percentage of a Number</h2>
+      <p>Sometimes the question runs in the opposite direction: you already know the percentage and need to find the actual amount it represents.</p>
+      <div class="formula-box">Result = (Percentage ÷ 100) × Number</div>
+      <p>For example, to find 20% of 150:</p>
+      <div class="example-box">(20 ÷ 100) × 150 = 30</div>
+      <p>Step by step, divide 20 by 100 to get 0.2, then multiply 0.2 by 150 to get 30. So 20% of 150 is 30. The calculator above does this instantly, but it's a useful shortcut to keep in your head for quick estimates, like figuring out a discount while you're standing in a shop.</p>
+
+      <h2>How to Calculate Percentage Increase</h2>
+      <p>Percentage increase measures how much a value has grown, expressed as a share of the original value.</p>
+      <div class="formula-box">Percentage Increase = ((New Value − Original Value) ÷ Original Value) × 100</div>
+      <p>For example, imagine a product's price rises from $80 to $100:</p>
+      <div class="example-box">((100 − 80) ÷ 80) × 100 = 25% increase</div>
+      <p>The price rose by $20, and that $20 works out to 25% of the original $80 — not of the new $100. Mixing up which number is the "original" is one of the most common mistakes people make with this formula. Percentage increase is especially useful for tracking price changes, sales growth, revenue trends, investment returns, and other business or personal-finance metrics over time.</p>
+
+      <h2>How to Calculate Percentage Decrease</h2>
+      <p>Percentage decrease works the same way, but measures how far a value has fallen.</p>
+      <div class="formula-box">Percentage Decrease = ((Original Value − New Value) ÷ Original Value) × 100</div>
+      <p>For example, if a price drops from $200 to $150:</p>
+      <div class="example-box">((200 − 150) ÷ 200) × 100 = 25% decrease</div>
+      <p>The price fell by $50, which is 25% of the original $200. This calculation comes up constantly with discounts, sales, price reductions, and shrinking budgets or expenses. Whether an answer counts as an increase or a decrease depends entirely on which direction the value moved, so it's worth double-checking your original and new values before trusting the result.</p>
+
+      <h2>Percentage vs Percentage Points</h2>
+      <p>It's easy to confuse "percentage" and "percentage points," but the two mean different things, and mixing them up can lead to real misunderstandings.</p>
+      <p>A percentage point is simply the plain, arithmetic difference between two percentages. A percentage change measures that same gap relative to the starting number.</p>
+      <div class="example-box">
+        <strong>Example:</strong> A rate changes from 5% to 7%.<br>
+        The change is 2 percentage points (7 − 5).<br>
+        But the relative increase is 40%, because 2 is 40% of the original 5.
+      </div>
+      <p>This distinction matters most in finance, economics, and news reporting, where a small change in percentage points can represent a much larger relative change — or vice versa. A headline announcing that "unemployment rose 2%" usually means 2 percentage points, which could actually be a much bigger relative jump. Always pause to check which one is being described before drawing conclusions or making comparisons.</p>
+
+      <h2>Common Percentage Examples</h2>
+      <p>Percentages appear in situations most people run into every week. A few examples make the formulas above easier to picture.</p>
+
+      <h3>Shopping</h3>
+      <p>A $60 jacket is on sale for 30% off. The discount is (30 ÷ 100) × 60 = $18, so the new price is $42.</p>
+
+      <h3>Finance</h3>
+      <p>A savings account offers a 3% annual rate. On a $1,000 balance, that's (3 ÷ 100) × 1,000 = $30 in interest over a year, before compounding is taken into account.</p>
+
+      <h3>Business</h3>
+      <p>A company's revenue grows from $50,000 to $56,000. The growth rate is ((56,000 − 50,000) ÷ 50,000) × 100 = 12%.</p>
+
+      <h3>School</h3>
+      <p>A student answers 38 out of 40 questions correctly. Their score is (38 ÷ 40) × 100 = 95%.</p>
+
+      <h3>Everyday Life</h3>
+      <p>Leaving an 18% tip on a $45 restaurant bill comes to (18 ÷ 100) × 45 = $8.10.</p>
+
+      <h2 id="how-it-works">How to Use a Percentage Calculator</h2>
+      <p>Using the calculator on this page takes only a few steps:</p>
+      <ol>
+        <li>Choose the type of calculation you need from the three tabs.</li>
+        <li>Enter your values into the input fields.</li>
+        <li>Click Calculate.</li>
+        <li>Review the result along with the formula that produced it.</li>
+        <li>Click Reset if you want to start a new calculation.</li>
+      </ol>
+      <p>Each tab is built for a specific type of question — finding a percentage of a number, working out what percent one number is of another, or measuring a change between two values — so picking the right one first will get you to a clear answer faster than trying to force one formula to do everything.</p>
+
+      <h2>Why Percentage Calculations Matter in Finance</h2>
+      <p>Percentages sit at the center of nearly every financial decision. Interest rates, savings growth, and investment returns are all expressed as percentages, which is what makes it possible to compare very different amounts of money on the same scale.</p>
+      <p>When you're reviewing a loan offer, comparing savings account rates, or checking how inflation affects your budget, a percentage calculation shows you the real impact rather than just the raw numbers. The same logic applies to business growth, fees, and discounts. Depending on what exactly you're working out, different financial situations call for tools built around the specific numbers involved.</p>
+      <div class="resource-note">
+        For example, if you're weighing a fixed-term savings option, a dedicated <strong><a href="https://itscdcalculator.com" rel="noopener">CD Calculator</a></strong> can help you work out the maturity value and interest earned on a certificate of deposit, since those calculations involve a fixed term and compounding that a general percentage calculator isn't designed to handle.
+      </div>
+      <p>A small difference in a percentage rate can add up to a large difference in actual money once it's applied to a big enough amount or stretched over a long enough time. That's why it's worth running the numbers rather than relying on a rough sense of "high" or "low," especially for decisions involving borrowing, saving, or investing over several years.</p>
+
+      <h2>Percentage Calculation Formulas</h2>
+      <p>Here is a quick reference for the formulas covered on this page.</p>
+
+      <h3>Basic Percentage</h3>
+      <div class="formula-box">Percentage = (Part ÷ Whole) × 100</div>
+
+      <h3>Percentage of a Number</h3>
+      <div class="formula-box">Result = (Percentage ÷ 100) × Number</div>
+
+      <h3>Percentage Increase</h3>
+      <div class="formula-box">Increase % = ((New − Original) ÷ Original) × 100</div>
+
+      <h3>Percentage Decrease</h3>
+      <div class="formula-box">Decrease % = ((Original − New) ÷ Original) × 100</div>
+
+      <h3>Percentage Difference</h3>
+      <div class="formula-box">Percentage Difference = (|Value 1 − Value 2| ÷ ((Value 1 + Value 2) ÷ 2)) × 100</div>
+
+      <h2>Tips for Getting Percentage Calculations Right</h2>
+      <ul>
+        <li>Double-check which number is the "original" before calculating a change.</li>
+        <li>Don't confuse a percentage change with percentage points.</li>
+        <li>Convert percentages into decimals carefully — divide by 100 — when calculating by hand.</li>
+        <li>Keep units consistent, especially when comparing money, time, or quantities.</li>
+        <li>Confirm whether you actually need an increase or a decrease before reading the sign of the result.</li>
+        <li>Round only at the final step, not in the middle of a calculation.</li>
+        <li>Sanity-check your result: if a "10% increase" appears to double the number, something is wrong.</li>
+      </ul>
+
+      <h2 id="faq">Frequently Asked Questions</h2>
+      <div>
+        <details class="faq-item" open>
+          <summary>What is the easiest way to calculate a percentage?</summary>
+          <p>Divide the part by the whole, then multiply by 100. Or use the calculator on this page to skip the manual math entirely.</p>
+        </details>
+        <details class="faq-item">
+          <summary>How do I calculate 10% of a number?</summary>
+          <p>Divide the number by 10, or multiply it by 0.1. For example, 10% of 250 is 25.</p>
+        </details>
+        <details class="faq-item">
+          <summary>How do I calculate percentage increase?</summary>
+          <p>Subtract the original value from the new value, divide the result by the original value, then multiply by 100. This gives you the percentage increase.</p>
+        </details>
+        <details class="faq-item">
+          <summary>How do I calculate percentage decrease?</summary>
+          <p>Subtract the new value from the original value, divide the result by the original value, then multiply by 100. This gives you the percentage decrease.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What is the difference between percentage and percentage points?</summary>
+          <p>A percentage point is a plain difference between two percentages, like going from 5% to 7% being 2 percentage points. A percentage change measures that same difference relative to the starting value, which is 40% in that example.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Can a percentage calculator calculate discounts?</summary>
+          <p>Yes. A discount is just a percentage decrease. Enter the original price and the percentage off to find the amount saved and the final price.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Can percentage calculations be used for financial planning?</summary>
+          <p>Yes. Interest rates, savings growth, investment returns, and budget changes are all expressed as percentages, so understanding these calculations is a genuinely useful part of everyday financial planning.</p>
+        </details>
+      </div>
+
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <a href="#top" class="brand">
+        <svg class="brand-mark" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+          <rect x="1.5" y="1.5" width="37" height="37" rx="9" fill="#161616"/>
+          <rect x="7" y="7" width="26" height="9" rx="2.5" fill="#faf9f6"/>
+          <circle cx="13" cy="24.5" r="2.6" fill="#EC8B23"/>
+          <circle cx="13" cy="32" r="2.6" fill="#faf9f6"/>
+          <circle cx="20" cy="24.5" r="2.6" fill="#faf9f6"/>
+          <circle cx="20" cy="32" r="2.6" fill="#faf9f6"/>
+          <circle cx="27" cy="24.5" r="2.6" fill="#faf9f6"/>
+          <circle cx="27" cy="32" r="2.6" fill="#EC8B23"/>
+        </svg>
+        <span class="brand-text">Percentage<span class="light">Calculator</span></span>
+      </a>
+      <p>A simple, free tool for calculating percentages, percentage increase, percentage decrease, and percentage differences.</p>
+    </div>
+    <nav class="footer-nav" aria-label="Footer navigation">
+      <a href="#top">Home</a>
+      <a href="#calculator">Calculator</a>
+      <a href="#how-it-works">How It Works</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+  </div>
+  <div class="container footer-bottom">
+    &copy; 2026 Percentage Calculator. All rights reserved.
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  var navToggle = document.getElementById("navToggle");
+  var mainNav = document.getElementById("mainNav");
+  navToggle.addEventListener("click", function(){
+    var open = mainNav.classList.toggle("open");
+    navToggle.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+  mainNav.addEventListener("click", function(e){
+    if (e.target.tagName === "A") {
+      mainNav.classList.remove("open");
+      navToggle.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  var tabs = [
+    { btn: document.getElementById("tab-of"), panel: document.getElementById("panel-of"), mode: "of" },
+    { btn: document.getElementById("tab-percent"), panel: document.getElementById("panel-percent"), mode: "percent" },
+    { btn: document.getElementById("tab-change"), panel: document.getElementById("panel-change"), mode: "change" }
+  ];
+  var currentMode = "of";
+
+  function selectTab(mode){
+    currentMode = mode;
+    tabs.forEach(function(t){
+      var active = t.mode === mode;
+      t.btn.setAttribute("aria-selected", active ? "true" : "false");
+      t.panel.hidden = !active;
+    });
+    hideError();
+    showPlaceholder();
+  }
+
+  tabs.forEach(function(t){
+    t.btn.addEventListener("click", function(){ selectTab(t.mode); });
+  });
+
+  var form = document.getElementById("calcForm");
+  var errorMsg = document.getElementById("errorMsg");
+  var resultBody = document.getElementById("resultBody");
+
+  function showError(message){
+    errorMsg.textContent = message;
+    errorMsg.classList.add("show");
+  }
+  function hideError(){
+    errorMsg.textContent = "";
+    errorMsg.classList.remove("show");
+  }
+  function showPlaceholder(){
+    resultBody.innerHTML = '<p class="result-placeholder">Enter your values and press Calculate to see the result here.</p>';
+  }
+
+  function formatNumber(n){
+    if (!isFinite(n)) return "0";
+    var rounded = Math.round(n * 100) / 100;
+    return rounded.toString();
+  }
+
+  function parseInput(id){
+    var el = document.getElementById(id);
+    var raw = el.value.trim();
+    if (raw === "") return { ok:false, el:el };
+    var num = parseFloat(raw);
+    if (isNaN(num)) return { ok:false, el:el };
+    return { ok:true, value:num, el:el };
+  }
+
+  function renderResult(bigText, explain, formula){
+    resultBody.innerHTML =
+      '<div class="result-value">' + bigText + '</div>' +
+      '<p class="result-explain">' + explain + '</p>' +
+      '<div class="result-formula">' + formula + '</div>';
+  }
+
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+    hideError();
+
+    if (currentMode === "of") {
+      var p = parseInput("of-percent");
+      var n = parseInput("of-number");
+      if (!p.ok || !n.ok) { showError("Enter valid numbers for both fields."); return; }
+      var result = (p.value / 100) * n.value;
+      renderResult(
+        formatNumber(result),
+        p.value + "% of " + n.value + " is " + formatNumber(result) + ".",
+        "(" + p.value + " ÷ 100) × " + n.value + " = " + formatNumber(result)
+      );
+    }
+
+    else if (currentMode === "percent") {
+      var part = parseInput("pct-part");
+      var total = parseInput("pct-total");
+      if (!part.ok || !total.ok) { showError("Enter valid numbers for both fields."); return; }
+      if (total.value === 0) { showError("Total cannot be zero."); return; }
+      var pct = (part.value / total.value) * 100;
+      renderResult(
+        formatNumber(pct) + "%",
+        part.value + " is " + formatNumber(pct) + "% of " + total.value + ".",
+        "(" + part.value + " ÷ " + total.value + ") × 100 = " + formatNumber(pct) + "%"
+      );
+    }
+
+    else if (currentMode === "change") {
+      var orig = parseInput("chg-original");
+      var nw = parseInput("chg-new");
+      if (!orig.ok || !nw.ok) { showError("Enter valid numbers for both fields."); return; }
+      if (orig.value === 0) { showError("Original value cannot be zero."); return; }
+      var diff = nw.value - orig.value;
+      var changePct = (diff / orig.value) * 100;
+      var direction = changePct > 0 ? "increase" : (changePct < 0 ? "decrease" : "change");
+      var magnitude = Math.abs(changePct);
+      renderResult(
+        formatNumber(magnitude) + "% " + direction,
+        "Going from " + orig.value + " to " + nw.value + " is a " + formatNumber(magnitude) + "% " + direction + ".",
+        "((" + nw.value + " − " + orig.value + ") ÷ " + orig.value + ") × 100 = " + formatNumber(changePct) + "%"
+      );
+    }
+  });
+
+  document.getElementById("resetBtn").addEventListener("click", function(){
+    form.reset();
+    hideError();
+    showPlaceholder();
+  });
+})();
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Percentage Calculator",
+  "url": "https://www.percentagecalculator.example/",
+  "description": "A free online tool for calculating percentages, percentage increase, percentage decrease, and percentage differences."
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is the easiest way to calculate a percentage?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Divide the part by the whole, then multiply by 100. Or use the calculator on this page to skip the manual math entirely."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I calculate 10% of a number?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Divide the number by 10, or multiply it by 0.1. For example, 10% of 250 is 25."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I calculate percentage increase?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Subtract the original value from the new value, divide the result by the original value, then multiply by 100. This gives you the percentage increase."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I calculate percentage decrease?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Subtract the new value from the original value, divide the result by the original value, then multiply by 100. This gives you the percentage decrease."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between percentage and percentage points?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A percentage point is a plain difference between two percentages, like going from 5% to 7% being 2 percentage points. A percentage change measures that same difference relative to the starting value, which is 40% in that example."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can a percentage calculator calculate discounts?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. A discount is just a percentage decrease. Enter the original price and the percentage off to find the amount saved and the final price."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can percentage calculations be used for financial planning?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Interest rates, savings growth, investment returns, and budget changes are all expressed as percentages, so understanding these calculations is a genuinely useful part of everyday financial planning."
+      }
+    }
+  ]
+}
+</script>
+
+</body>
+</html>
